@@ -1,5 +1,6 @@
 package com.mhl.view;
 
+import com.mhl.model.UserModel;
 import com.mhl.tools.*;
 import com.mhl.tools.*;
 import java.awt.Color;
@@ -8,6 +9,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -21,7 +24,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-public class UserLogin extends JDialog{
+public class UserLogin extends JDialog implements ActionListener{
 	
 	//define con
 	JLabel jl1,jl2,jl3;
@@ -78,11 +81,13 @@ public class UserLogin extends JDialog{
 		jCon=new JButton("确定");
 		jCon.setFont(MyTools.f1);
 		jCon.setBounds(110, 300, 70, 30);
+		jCon.addActionListener(this);
 		
 //		jcancle
 		jCancel = new JButton("取消");
 		jCancel.setFont(MyTools.f1);
 		jCancel.setBounds(220, 300, 70, 30);
+		jCancel.addActionListener(this);
 		
 		//add
 		ct.add(jName);
@@ -117,7 +122,7 @@ public class UserLogin extends JDialog{
 		public BackImage() {
 			// TODO Auto-generated constructor stub
 			try {
-				im = ImageIO.read(new File("image//login.gif"));
+				im = ImageIO.read(new File("image/login/login.gif"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -129,5 +134,27 @@ public class UserLogin extends JDialog{
 		public void paintComponent(Graphics g) {
 			g.drawImage(im, 0, 0, 360, 360, this);
 		}	
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==jCon) {
+			//trim() for the unvaluable space
+			String u=this.jName.getText().trim();
+			String p=new String(this.jPasswd.getPassword());
+//			System.out.println(u+" "+p);
+			UserModel um=new UserModel();
+			String res=um.checkUser(u, p).trim();
+			System.out.println(res);
+			if(res.equals("经理")||res.equals("主管")||res.equals("管理员")) {
+				new Window1();
+				this.dispose();
+			}
+		}else if(e.getSource()==jCancel) {
+			//you should add a tips!
+			this.dispose();
+			
+		}
 	}
 }

@@ -17,20 +17,27 @@ public class UserModel {
 	 * @param p passwd
 	 * @return clerk position if not return false
 	 */
-	public boolean checkUser(String uid, String p) {
+	public String checkUser(String uid, String p) {
 		
 		String position="";
-		
+		SqlHelper sp=null;
 		try {
-			String sql="select ? from login,lszl where login.empid = rszl.empid and login.empid=? and login.passwd=?";
+			String sql="select rszl.zhiwei from login,rszl where login.empid = rszl.empid and login.empid=? and login.passwd=?";
 			String paras[]= {uid,p};
-			SqlHelper sp=new SqlHelper();
+			sp=new SqlHelper();
 			ResultSet rs=sp.query(sql, paras);
+			if(rs.next()) {
+				//get position
+				position=rs.getString(1);
+			}
+			
 		} catch (Exception e) {
 			// TODO: handle exception
+		} finally {
+			sp.close();
 		}
 		
-		return false;
+		return position;
 		
 	}
 	

@@ -7,7 +7,9 @@
 package com.mhl.view;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -25,6 +27,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.Timer;
 
@@ -51,6 +54,13 @@ public class Window1 extends JFrame implements ActionListener{
 	JLabel timeNow;
 	//import a timer
 	Timer t;
+	//img tool
+	JLabel p1_lab1,p1_lab2,p1_lab3,p1_lab4,p1_lab5,p1_lab6,p1_lab7,p1_lab8;
+	ImagePanel p1_imgPanel;
+	//two jlable for p2
+	JLabel p2_lab1,p2_lab2;
+	//
+	JSplitPane jsp1;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -142,7 +152,74 @@ public class Window1 extends JFrame implements ActionListener{
 		jtb.add(jb9);
 		jtb.add(jb10);
 		
-		//panel
+		//panel 1
+		p1=new JPanel(new BorderLayout()); 
+		Image p1_bg=null;
+		try {
+			p1_bg = ImageIO.read(new File("image/main/windows1/jp1_bg.jpg"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		this.p1_imgPanel=new ImagePanel(p1_bg);
+		this.p1_imgPanel.setLayout(new GridLayout(8,1));
+		//p1_lab1
+		p1_lab1=new JLabel(new ImageIcon("image/main/windows1/label_1.gif"));
+		p1_imgPanel.add(p1_lab1);
+		//p1_lab2
+		p1_lab2=new JLabel("人 事 管 理",new ImageIcon("image/main/windows1/label_2.jpg"),0);
+		p1_imgPanel.add(p1_lab2);
+		//p1_lab3
+		p1_lab3=new JLabel("登 录 管 理",new ImageIcon("image/main/windows1/label_3.jpg"),0);
+		p1_imgPanel.add(p1_lab3);
+		//p1_lab4
+		p1_lab4=new JLabel("菜 谱 价 格",new ImageIcon("image/main/windows1/label_4.jpg"),0);
+		p1_imgPanel.add(p1_lab4);
+		//p1_lab5
+		p1_lab5=new JLabel("报 表 统 计",new ImageIcon("image/main/windows1/label_5.jpg"),0);
+		p1_imgPanel.add(p1_lab5);
+		//p1_lab6
+		p1_lab6=new JLabel("成 本 及 库 房",new ImageIcon("image/main/windows1/label_6.jpg"),0);
+		p1_imgPanel.add(p1_lab6);
+		//p1_lab7
+		p1_lab7=new JLabel("系 统 设 置",new ImageIcon("image/main/windows1/label_7.jpg"),0);
+		p1_imgPanel.add(p1_lab7);
+		//p1_lab8
+		p1_lab8=new JLabel("动 画 帮 助",new ImageIcon("image/main/windows1/label_8.jpg"),0);
+		p1_imgPanel.add(p1_lab8);
+		//add into p1
+		p1.add(this.p1_imgPanel);
+		//p2 p3 p4
+		p4=new JPanel(new BorderLayout());
+		p3=new JPanel(new CardLayout());
+		p2=new JPanel(new CardLayout());
+		p2_lab1=new JLabel(new ImageIcon("image/main/windows1/jp2_left.jpg"));
+		p2_lab2=new JLabel(new ImageIcon("image/main/windows1/jp2_right.jpg"));
+		//add into p2
+		p2.add(p2_lab1,"0");
+		p2.add(p2_lab2,"1");
+		//add main to p3
+		Image zhu_image=null;
+		try {
+			zhu_image=ImageIO.read(new File("image/main/windows1/jp3_bg.jpg"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		ImagePanel ip=new ImagePanel(zhu_image);
+		p3.add(ip,"0");
+		
+		//!!做一个拆分窗口，放p1和p4
+		jsp1=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,true,p1,p4);
+		//how large left
+		jsp1.setDividerLocation(120);
+		//cancle boder
+		jsp1.setDividerSize(0);
+		//add into p4
+		p4.add(p2,"West");
+		p4.add(p3,"Center");
+		
+		//panel 5
 		p5=new JPanel(new BorderLayout());
 		//trigger
 		t=new Timer(1000, this);
@@ -163,6 +240,7 @@ public class Window1 extends JFrame implements ActionListener{
 		//old method
 		Container ct=this.getContentPane();
 		ct.add(jtb,"North");
+		ct.add(jsp1,"Center");
 		ct.add(p5,"South");
 		//size
 		//pos
@@ -173,7 +251,6 @@ public class Window1 extends JFrame implements ActionListener{
 		this.setTitle("满汉楼餐饮管理");
 		this.setSize(w,h-30);
 		this.setVisible(true);
-	
 	
 	}
 

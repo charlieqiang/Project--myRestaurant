@@ -117,7 +117,7 @@ class paint extends JPanel implements Runnable
 	public void paintComponent(Graphics g){
 		//super.paintComponent(g);
 		Image image;
-		image=Toolkit.getDefaultToolkit().getImage("image\\sp.gif");//获得背景图片
+		image=Toolkit.getDefaultToolkit().getImage("image/welcome/sp.gif");//获得背景图片
 		g.drawImage(image, 0, 0, this.getWidth(), 200, this);
 		
 		int r=(int)(Math.random()*255);
