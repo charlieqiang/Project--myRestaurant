@@ -9,11 +9,14 @@ package com.mhl.view;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
@@ -34,7 +37,7 @@ import javax.swing.Timer;
 import com.mhl.tools.ImagePanel;
 import com.mhl.tools.MyTools;
 
-public class Window1 extends JFrame implements ActionListener{
+public class Window1 extends JFrame implements MouseListener,ActionListener{
 
 	//define img icon
 	Image titleIcon,timeGg;
@@ -61,22 +64,14 @@ public class Window1 extends JFrame implements ActionListener{
 	JLabel p2_lab1,p2_lab2;
 	//
 	JSplitPane jsp1;
-	
+	CardLayout cardP3;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new Window1();
 	}
-
-	public Window1() {
-		// TODO Auto-generated constructor stub
-		//create
-		try {
-			titleIcon=ImageIO.read(new File("image/main/title/cup.gif"));
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		
+	
+	//init menu
+	public void initMenu() {
 		//create icon
 		jmm1_icon1 = new ImageIcon("image/main/menu/user.jpg");
 		jmm1_icon2 = new ImageIcon("image/main/menu/sell.jpg");
@@ -125,7 +120,9 @@ public class Window1 extends JFrame implements ActionListener{
 		
 		//add jmb to jframe
 		this.setJMenuBar(jmb);
-		
+	}
+	
+	public void initToolBar() {
 		//toolbar
 		jtb=new JToolBar();
 		//set not move
@@ -151,16 +148,22 @@ public class Window1 extends JFrame implements ActionListener{
 		jtb.add(jb8);
 		jtb.add(jb9);
 		jtb.add(jb10);
-		
+	}
+
+	public void allPanels() {
 		//panel 1
 		p1=new JPanel(new BorderLayout()); 
 		Image p1_bg=null;
+		
 		try {
 			p1_bg = ImageIO.read(new File("image/main/windows1/jp1_bg.jpg"));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		//set a cursor
+		Cursor myCursor=new Cursor(Cursor.HAND_CURSOR);
+		
 		this.p1_imgPanel=new ImagePanel(p1_bg);
 		this.p1_imgPanel.setLayout(new GridLayout(8,1));
 		//p1_lab1
@@ -187,19 +190,45 @@ public class Window1 extends JFrame implements ActionListener{
 		//p1_lab8
 		p1_lab8=new JLabel("动 画 帮 助",new ImageIcon("image/main/windows1/label_8.jpg"),0);
 		p1_imgPanel.add(p1_lab8);
+		//false enable
+		p1_lab2.setEnabled(false);
+		p1_lab3.setEnabled(false);
+		p1_lab4.setEnabled(false);
+		p1_lab5.setEnabled(false);
+		p1_lab6.setEnabled(false);
+		p1_lab7.setEnabled(false);
+		p1_lab8.setEnabled(false);
+		p1_lab2.addMouseListener(this);
+		p1_lab3.addMouseListener(this);
+		p1_lab4.addMouseListener(this);
+		p1_lab5.addMouseListener(this);
+		p1_lab6.addMouseListener(this);
+		p1_lab7.addMouseListener(this);
+		p1_lab8.addMouseListener(this);
+		p1_lab2.setCursor(myCursor);
+		p1_lab3.setCursor(myCursor);
+		p1_lab4.setCursor(myCursor);
+		p1_lab5.setCursor(myCursor);
+		p1_lab6.setCursor(myCursor);
+		p1_lab7.setCursor(myCursor);
+		p1_lab7.setCursor(myCursor);
+		p1_lab8.setCursor(myCursor);
 		//add into p1
 		p1.add(this.p1_imgPanel);
 		//p2 p3 p4
 		p4=new JPanel(new BorderLayout());
-		p3=new JPanel(new CardLayout());
+		
 		p2=new JPanel(new CardLayout());
 		p2_lab1=new JLabel(new ImageIcon("image/main/windows1/jp2_left.jpg"));
 		p2_lab2=new JLabel(new ImageIcon("image/main/windows1/jp2_right.jpg"));
 		//add into p2
 		p2.add(p2_lab1,"0");
 		p2.add(p2_lab2,"1");
+		this.cardP3=new CardLayout();
+		p3=new JPanel(cardP3);
 		//add main to p3
 		Image zhu_image=null;
+		
 		try {
 			zhu_image=ImageIO.read(new File("image/main/windows1/jp3_bg.jpg"));
 		} catch (IOException e1) {
@@ -208,6 +237,10 @@ public class Window1 extends JFrame implements ActionListener{
 		}
 		ImagePanel ip=new ImagePanel(zhu_image);
 		p3.add(ip,"0");
+		
+		//add into p3		
+		EmpInfo eInfo=new EmpInfo();
+		p3.add(eInfo,"1");
 		
 		//!!做一个拆分窗口，放p1和p4
 		jsp1=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,true,p1,p4);
@@ -218,7 +251,23 @@ public class Window1 extends JFrame implements ActionListener{
 		//add into p4
 		p4.add(p2,"West");
 		p4.add(p3,"Center");
+	}
+
+	public Window1() {
+		// TODO Auto-generated constructor stub
+		//create
+		try {
+			titleIcon=ImageIO.read(new File("image/main/title/cup.gif"));
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 		
+		//init
+		this.initMenu();
+		this.initToolBar();
+		this.allPanels();
+
 		//panel 5
 		p5=new JPanel(new BorderLayout());
 		//trigger
@@ -226,12 +275,14 @@ public class Window1 extends JFrame implements ActionListener{
 		t.start();
 		timeNow=new JLabel(Calendar.getInstance().getTime().toLocaleString()+"   ");
 		timeNow.setFont(MyTools.f1);
+		
 		try {
 			timeGg=ImageIO.read(new File("image/main/statebar/time_bg.jpg"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		ImagePanel ip1=new ImagePanel(timeGg);
 		ip1.setLayout(new BorderLayout());
 		ip1.add(timeNow,"East");
@@ -258,5 +309,94 @@ public class Window1 extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		this.timeNow.setText("当前时间："+Calendar.getInstance().getTime().toLocaleString()+"   ");
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==this.p1_lab2) {
+			this.cardP3.show(p3, "1");
+		}
+		else if(e.getSource()==this.p1_lab3) {
+			this.cardP3.show(p3, "2");
+		}
+		else if(e.getSource()==this.p1_lab3) {
+			this.cardP3.show(p3, "2");
+		}
+		else if(e.getSource()==this.p1_lab3) {
+			this.cardP3.show(p3, "2");
+		}
+		else if(e.getSource()==this.p1_lab3) {
+			this.cardP3.show(p3, "2");
+		}
+		else if(e.getSource()==this.p1_lab3) {
+			this.cardP3.show(p3, "2");
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		//if focus in highlight
+		if(e.getSource()==this.p1_lab2) {
+			p1_lab2.setEnabled(true);
+		}
+		else if(e.getSource()==this.p1_lab3) {
+			p1_lab3.setEnabled(true);
+		}
+		else if(e.getSource()==this.p1_lab4) {
+			p1_lab4.setEnabled(true);
+		}
+		else if(e.getSource()==this.p1_lab5) {
+			p1_lab5.setEnabled(true);
+		}
+		else if(e.getSource()==this.p1_lab6) {
+			p1_lab6.setEnabled(true);
+		}
+		else if(e.getSource()==this.p1_lab7) {
+			p1_lab7.setEnabled(true);
+		}
+		else if(e.getSource()==this.p1_lab8) {
+			p1_lab8.setEnabled(true);
+		}
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==this.p1_lab2) {
+			p1_lab2.setEnabled(false);
+		}
+		else if(e.getSource()==this.p1_lab3) {
+			p1_lab3.setEnabled(false);
+		}
+		else if(e.getSource()==this.p1_lab4) {
+			p1_lab4.setEnabled(false);
+		}
+		else if(e.getSource()==this.p1_lab5) {
+			p1_lab5.setEnabled(false);
+		}
+		else if(e.getSource()==this.p1_lab6) {
+			p1_lab6.setEnabled(false);
+		}
+		else if(e.getSource()==this.p1_lab7) {
+			p1_lab7.setEnabled(false);
+		}
+		else if(e.getSource()==this.p1_lab8) {
+			p1_lab8.setEnabled(false);
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
