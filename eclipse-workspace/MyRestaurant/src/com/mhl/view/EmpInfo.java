@@ -8,9 +8,12 @@ package com.mhl.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -19,7 +22,7 @@ import javax.swing.JTextField;
 import com.mhl.model.EmpModel;
 import com.mhl.tools.MyTools;
 
-public class EmpInfo extends JPanel{
+public class EmpInfo extends JPanel implements ActionListener{
 
 	//define
 	JPanel p1,p2,p3,p4,p5;
@@ -30,6 +33,7 @@ public class EmpInfo extends JPanel{
 	JTable jtable;
 	//
 	JScrollPane jsp;
+	EmpModel em;
 	public EmpInfo() {
 		// TODO Auto-generated constructor stub
 		//create
@@ -44,9 +48,9 @@ public class EmpInfo extends JPanel{
 		p1.add(p1_jtf1);
 		p1.add(p1_jb1);		
 		//middle
-		EmpModel em=new EmpModel();
+		em=new EmpModel();
 		String []paras= {"1"};
-		em.query("select empid,empname,sex,zhiwei from rszl where 1=?", paras);
+		em.query("select empid,empname,sex,zhiwei,address from rszl where 1=?", paras);
 		jtable=new JTable(em);
 		p2=new JPanel(new BorderLayout());
 		jsp=new JScrollPane(jtable);
@@ -65,6 +69,8 @@ public class EmpInfo extends JPanel{
 		p4_jb2=new JButton("添加");
 		p4_jb3=new JButton("修改");
 		p4_jb4=new JButton("删除");
+		p4_jb4.addActionListener(this);
+		
 		p4_jb1.setFont(MyTools.f3);
 		p4_jb2.setFont(MyTools.f3);
 		p4_jb3.setFont(MyTools.f3);
@@ -86,6 +92,27 @@ public class EmpInfo extends JPanel{
 		this.add(p5,"South");
 		
 		this.setVisible(true);
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==this.p4_jb4) {
+			
+			int selRowNum=jtable.getSelectedRow();
+			String empNo=(String)em.getValueAt(selRowNum, 0);
+//			System.out.println(empNo);		
+			if(em.delEmpById(empNo)) {
+				JOptionPane.showMessageDialog(null, "删除成功");
+			}else {
+				JOptionPane.showMessageDialog(null, "删除失败");
+			}
+			String []paras= {"1"};
+			em=new EmpModel();
+			String sql="select empid,empname,sex,zhiwei,address from rszl where 1=?";
+			em.query(sql, paras);
+			jtable.setModel(em);
+		
+		}
 	}
 	
 }

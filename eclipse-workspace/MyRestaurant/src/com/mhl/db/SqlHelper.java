@@ -34,6 +34,29 @@ public class SqlHelper {
 		}
 	
 	}
+	
+	//cru
+	public boolean exeUpdate(String sql, String[]paras) {
+		
+		boolean b=true;
+		try {
+			ps=ct.prepareStatement(sql);
+			//add
+			for(int i=0;i<paras.length;i++) {
+				ps.setString(i+1, paras[i]);
+				
+			}
+			ps.executeUpdate();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			b=false;
+			e.printStackTrace();
+			
+		}
+		return b;
+		
+	}
 	public ResultSet query(String sql, String []paras) {
 		try {
 			ps=ct.prepareStatement(sql);
